@@ -4,6 +4,7 @@ import * as TanstackQuery from './integrations/tanstack-query/root-provider'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
+import { ThemeProvider } from './components/theme-provider'
 
 // Create a new router instance
 export const getRouter = () => {
@@ -16,7 +17,12 @@ export const getRouter = () => {
     Wrap: (props: { children: React.ReactNode }) => {
       return (
         <TanstackQuery.Provider {...rqContext}>
-          {props.children}
+          <ThemeProvider
+            defaultTheme="system"
+            storageKey="5726caaa-c76c-4e8d-961a-81e6d6e65acb-ui-theme"
+          >
+            {props.children}
+          </ThemeProvider>
         </TanstackQuery.Provider>
       )
     },
