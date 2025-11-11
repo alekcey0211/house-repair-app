@@ -19,7 +19,7 @@ export function App() {
         >
           <Label
             htmlFor="r1"
-            className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 has-data-[state=checked]:border-ring has-data-[state=checked]:bg-input/20 grid gap-3 rounded-lg border p-3"
+            className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 has-data-[state=checked]:border-ring has-data-[state=checked]:bg-input/20 has-data-[state=checked]:shadow grid gap-3 rounded-lg border p-3"
           >
             <RadioGroupItem value="flat" id="r1" />
             <div className="grid gap-2">
@@ -31,7 +31,7 @@ export function App() {
           </Label>
           <Label
             htmlFor="r2"
-            className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 has-data-[state=checked]:border-ring has-data-[state=checked]:bg-input/20 grid gap-3 rounded-lg border p-3"
+            className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 has-data-[state=checked]:border-ring has-data-[state=checked]:bg-input/20 has-data-[state=checked]:shadow grid gap-3 rounded-lg border p-3"
           >
             <RadioGroupItem value="house" id="r2" />
             <div className="grid gap-2">
