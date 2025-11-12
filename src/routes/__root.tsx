@@ -5,7 +5,6 @@ import {
 } from '@tanstack/react-router'
 
 import { lazy } from 'react'
-import Header from '../components/Header'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import TanStackRouterDevtools from '../integrations/tanstack-router/devtools'
@@ -13,7 +12,6 @@ import TanStackRouterDevtools from '../integrations/tanstack-router/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
-import { Footer } from '@/components/footer'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -57,9 +55,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="grid grid-rows-[auto_1fr_auto] min-h-screen supports-h-sdh:h-dvh">
-        <Header />
         {children}
-        <Footer />
         {import.meta.env.DEV && (
           <TanStackDevtools
             config={{

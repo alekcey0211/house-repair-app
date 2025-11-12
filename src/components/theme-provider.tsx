@@ -1,4 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+'use client'
+
+import { createContext, useContext, useEffect } from 'react'
+import { changeAppState, useLiveAppState } from '@/db-collections'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -20,18 +23,8 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-export function ThemeProvider({
-  children,
-  defaultTheme = 'system',
-  storageKey = 'vite-ui-theme',
-  ...props
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() =>
-    typeof window === 'undefined'
-      ? defaultTheme
-      : ((window.localStorage.getItem(storageKey) as Theme | null) ??
-        defaultTheme),
-  )
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  const { theme } = useLiveAppState()
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -54,9 +47,9 @@ export function ThemeProvider({
   const value = {
     theme,
     setTheme: (nextTheme: Theme) => {
-      if (typeof window !== 'undefined')
-        window.localStorage.setItem(storageKey, nextTheme)
-      setTheme(nextTheme)
+      changeAppState((state) => {
+        state.theme = nextTheme
+      })
     },
   }
 
