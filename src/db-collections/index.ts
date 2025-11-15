@@ -12,6 +12,17 @@ const AppStateSchema = z.object({
   theme: z.enum(['light', 'dark', 'system']).optional().default('system'),
   building_type: z.enum(['flat', 'house']).optional(),
   building_repair_type: z.enum(['white_box', 'clean']).optional(),
+  selected_task_id: z.string().optional(),
+  todo_list: z
+    .array(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        description: z.string().optional(),
+        status: z.enum(['todo', 'in_progress', 'done']).optional(),
+      }),
+    )
+    .optional(),
 })
 
 export type AppState = z.infer<typeof AppStateSchema>

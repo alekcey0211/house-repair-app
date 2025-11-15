@@ -1,13 +1,33 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
+import { ChevronRightIcon, SquareCheck, SquareIcon } from 'lucide-react'
+import { v4 as uuidv4 } from 'uuid'
 import Header from './Header'
 import { ThemeProvider } from './theme-provider'
 import { Footer } from './footer'
+import { TaskAddForm } from './task-add-form'
 import type { ReactNode } from 'react'
 import type { AppState } from '@/db-collections'
+import { Separator } from '@/components/ui/separator'
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from '@/components/ui/item'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Button } from '@/components/ui/button'
 import { changeAppState, useLiveAppState } from '@/db-collections'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer'
 
 const Page = ({ children }: { children: ReactNode }) => {
   return (
@@ -85,7 +105,6 @@ const SelectionBuildingType = () => {
           size="lg"
           className="shadow text-xl"
           onClick={() => {
-            console.log(value)
             changeAppState((state) => {
               state.building_type = value
             })
@@ -149,7 +168,6 @@ const SelectionBuildingRepairType = () => {
           size="lg"
           className="shadow text-xl"
           onClick={() => {
-            console.log(value)
             changeAppState((state) => {
               state.building_repair_type = value
             })
@@ -170,13 +188,68 @@ const Content = () => {
       <h1 className="text-center text-4xl font-extrabold tracking-tight text-balance">
         Планировщик ремонта
       </h1>
-      <div className="grid place-content-center p-4">
-        <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-          {appState.building_type}
-        </h2>
-        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-          {appState.building_repair_type}
-        </h3>
+      <ItemGroup className="py-4">
+        {appState.todo_list?.map((task, index, array) => (
+          <Fragment key={task.id}>
+            <Item
+              variant="default"
+              size="sm"
+              onClick={() => {
+                changeAppState((state) => {
+                  state.selected_task_id = task.id
+                })
+              }}
+            >
+              <ItemMedia>
+                {task.status === 'done' ? (
+                  <SquareCheck className="size-5" />
+                ) : (
+                  <SquareIcon className="size-5" />
+                )}
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle className="text-lg">{task.title}</ItemTitle>
+              </ItemContent>
+              <ItemActions>
+                <ChevronRightIcon className="size-4" />
+              </ItemActions>
+            </Item>
+            {index !== array.length - 1 && <Separator />}
+          </Fragment>
+        ))}
+      </ItemGroup>
+      <div className="grid p-4">
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button size="lg" className="shadow text-xl">
+              Добавить задачу
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Добавить задачу</DrawerTitle>
+              <DrawerDescription>
+                Добавьте задачу для планирования ремонта
+              </DrawerDescription>
+            </DrawerHeader>
+            <TaskAddForm
+              onSubmit={(values) => {
+                changeAppState((state) => {
+                  state.todo_list = [
+                    ...(state.todo_list ?? []),
+                    {
+                      id: uuidv4(),
+                      title: values.title,
+                      description: values.description,
+                      status: 'todo',
+                    },
+                  ]
+                })
+              }}
+              className="p-4"
+            />
+          </DrawerContent>
+        </Drawer>
       </div>
     </Page>
   )
